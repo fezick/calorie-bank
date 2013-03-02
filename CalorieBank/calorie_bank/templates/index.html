@@ -1,0 +1,24 @@
+<html>
+<head>
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" type="text/css" rel="stylesheet">
+<script>
+</script>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <div class="span9">
+    <table class="table table-border table-striped">
+    {% for day in days %}
+    <tr><td>{{day.date}}</td><td>{{day.calories}}</td></tr>
+    {% endfor %}
+    </table>
+    </div>
+    <div class="span3">
+        <h1>{{bank.balance}}</h1>
+    </div>
+</div>
+
+</div>
+</body>
+<body>
