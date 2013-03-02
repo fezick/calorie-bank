@@ -23,6 +23,8 @@ class CalorieBank(models.Model):
         days = DietDay.objects.all()
         for day in days:
             remainder = 2000-day.calories
+            if remainder > 200:
+                remainder = 200
             bal += remainder
         self.balance=bal
         super(CalorieBank,self).save()
