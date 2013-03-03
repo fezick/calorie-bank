@@ -20,8 +20,14 @@
 <div class="row">
     <div class="span8">
         <table class="table table-bordered table-striped">
+        <tr><th>Date</th><th>Calories</th></tr>
         {% for day in days %}
-        <tr><td>{{day.date}}</td><td>{{day.calories}}</td></tr>
+        {% if day.date == today %}
+            <tr class="info">
+        {% else %}
+            <tr>
+        {% endif %}
+        <td>{{day.date}}</td><td>{{day.calories}}</td></tr>
         {% endfor %}
         </table>
     </div>

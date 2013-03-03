@@ -1,3 +1,5 @@
+MAX_DAILY_CALS = 2000
+MAX_BANKED_CALS = 200 
 # Django settings for CalorieBank project.
 
 DEBUG = True

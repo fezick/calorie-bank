@@ -7,10 +7,15 @@ from django.shortcuts import render_to_response
 from .models import *
 
 def home(request):
-    window = datetime.date.today()-datetime.timedelta(days=7)
-    days = DietDay.objects.exclude(date__lt=window)
+    today = datetime.date.today()
+    window = today-datetime.timedelta(days=7)
+    days = DietDay.objects.exclude(date__lt=window).order_by('-date')
     bank = CalorieBank.objects.all()[0]
-    #bank = "bank"
-    ctx = {"bank":bank,"days":days}
+    
+    ctx = {
+        "bank":bank,
+        "days":days,
+        "today":today
+        }
 
     return render_to_response("index.html", ctx, RequestContext(request))

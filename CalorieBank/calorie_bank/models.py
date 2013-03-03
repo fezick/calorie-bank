@@ -1,4 +1,7 @@
 #from django.core.signals import request_finished
+import datetime
+
+from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_delete
 from django.db import models
@@ -12,11 +15,6 @@ class DietDay(models.Model):
         bank = CalorieBank.objects.all()[0]        
         super(DietDay,self).save()
         bank.save()
-    
-    """def delete():
-        bank = CalorieBank.objects.all()[0]        
-        super(delete,self).delete()
-        bank.save()"""
     
     def __unicode__(self):
         return "%s (%s)" % (self.date, self.calories)
@@ -35,11 +33,11 @@ class CalorieBank(models.Model):
 
     def save(self):
         bal = 0
-        days = DietDay.objects.all()
+        days = DietDay.objects.all().exclude(date=datetime.datetime.now())
         for day in days:
-            remainder = 2000-day.calories
-            if remainder > 200:
-                remainder = 200
+            remainder = settings.MAX_DAILY_CALS-day.calories
+            if remainder > settings.MAX_BANKED_CALS:
+                remainder = settings.MAX_BANKED_CALS
             bal += remainder
         self.balance=bal
         print bal
