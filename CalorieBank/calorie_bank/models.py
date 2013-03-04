@@ -34,11 +34,14 @@ class CalorieBank(models.Model):
     def save(self):
         bal = 0
         days = DietDay.objects.all().exclude(date=datetime.datetime.now())
+        today = DietDay.objects.all().filter(date=datetime.datetime.now())[0]
         for day in days:
             remainder = settings.MAX_DAILY_CALS-day.calories
             if remainder > settings.MAX_BANKED_CALS:
                 remainder = settings.MAX_BANKED_CALS
             bal += remainder
+        if today.calories>settings.MAX_DAILY_CALS:
+            bal = bal-(today.calories-settings.MAX_DAILY_CALS)
         self.balance=bal
         print bal
         super(CalorieBank,self).save()
