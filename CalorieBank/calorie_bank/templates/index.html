@@ -1,6 +1,7 @@
 <html>
 <head>
-<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" type="text/css" rel="stylesheet">
+<link href="http://css.nlx.org/framework/v2/css/code/bootstrap.221.min.css" type="text/css" rel="stylesheet">
+<script src="http://js.nlx.org/framework/v2/js/def.ui.jquery.core.js"></script>
 <style>
 .container{
     margin: 10px auto;
@@ -11,8 +12,60 @@
     font-size: 6em;
     width: 100%;
 }
+.calorie_report .static{
+    display:block;
+}
+.calorie_report .update{
+    margin: 0;
+    display: none;
+}
+.calorie_report input{
+    font-size: 1em;
+    height: 30px;
+}
+.table .btn{
+    margin-top: -9px;
+    margin-left: 10px;
+}
 </style>
 <script>
+$(document).ready(function(){
+$("td.calorie_report button.cancel").click(function(){
+    row_id = $(this).attr("data-parent-id");
+    close_row_form(row_id);
+})
+$("td.calorie_report .static").click(function(){
+    row_id = $(this).parent()[0].id;
+    $("#"+row_id+"_static").hide()
+    $("#"+row_id+"_update").show()
+    $("#"+row_id+"_update button").removeClass("disabled");
+});
+$("td.calorie_report .update .save").click(function(){
+    row_id = $(this).attr("data-parent-id");
+    newcal = $("#"+row_id+" .calorie_report_input").val()
+    save(row_id,newcal);
+});
+});
+function close_row_form(row_id){
+    $("#"+row_id+"_static").show()
+    $("#"+row_id+"_update").hide()
+}
+function update_row_form(row_id,cals,balance){
+    $("#"+row_id+"_static").html(cals)
+    $("#"+row_id+"_update").children("input").val(cals)
+    $("#balance h1").html(balance)
+}
+function save(row_id,cals){
+    $("#"+row_id+"_update button").addClass("disabled");
+    $.ajax({
+        url: "/update/",
+        data: {"day_id":row_id.replace("day_",""),"calories":cals},
+        success: function(data){
+            update_row_form(data.row_id,data.cals,data.balance);
+            close_row_form(data.row_id);
+        }
+    });
+}
 </script>
 </head>
 <body>
@@ -20,14 +73,28 @@
 <div class="row">
     <div class="span8">
         <table class="table table-bordered table-striped">
-        <tr><th>Date</th><th>Calories</th></tr>
+        <tr><th class="span3">Date</th><th>Calories</th></tr>
         {% for day in days %}
         {% if day.date == today %}
             <tr class="info">
         {% else %}
             <tr>
         {% endif %}
-        <td>{{day.date}}</td><td>{{day.calories}}</td></tr>
+            <td>{{day.date}}</td>
+            <td class="calorie_report" id="day_{{day.id}}">
+                <span class="static" id="day_{{day.id}}_static">{{day.calories}}</span>
+                <span class="update" id="day_{{day.id}}_update">
+                    <input type='text' class='span2 calorie_report_input' 
+                        name='calories' value='{{day.calories}}'>
+                    <button class='save btn btn-primary' data-parent-id="day_{{day.id}}">
+                        update
+                    </button>
+                    <button class='cancel btn' data-parent-id="day_{{day.id}}">
+                        cancel
+                    </button>
+                </span>
+            </td>
+        </tr>
         {% endfor %}
         </table>
     </div>
