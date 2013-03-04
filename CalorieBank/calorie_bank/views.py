@@ -1,7 +1,7 @@
 # Create your views here.
 import datetime
 
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
@@ -11,6 +11,12 @@ from .models import *
 def home(request):
     today = datetime.date.today()
     window = today-datetime.timedelta(days=7)
+    try:
+        today = DietDay.objects.filter(date=datetime.datetime.now())[0]
+    except IndexError:
+        add_day = DietDay(date=datetime.datetime.now(),calories=0)
+        add_day.save()
+        
     days = DietDay.objects.exclude(date__lt=window).order_by('-date')
     bank = CalorieBank.objects.all()[0]
     
