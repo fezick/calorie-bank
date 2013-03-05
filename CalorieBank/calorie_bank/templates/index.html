@@ -1,3 +1,4 @@
+<! doctype html>
 <html>
 <head>
 <link href="http://css.nlx.org/framework/v2/css/code/bootstrap.221.min.css" type="text/css" rel="stylesheet">
@@ -69,6 +70,15 @@ function save(row_id,cals){
 </script>
 </head>
 <body>
+<div class="navbar">
+    <div class="navbar-inner">
+        <a class="brand" href="/">CalorieBank</a>
+        <ul class="nav">
+            <li class="active"><a href="/">Home</a>
+            <li><a href="/admin/">Admin</a>
+        </ul>
+    </div>
+</div>
 <div class="container">
 <div class="row">
     <div class="span8">
@@ -100,6 +110,7 @@ function save(row_id,cals){
     </div>
     <div class="span4">
         <div class="label label-info" id="balance">
+            <div class="label label">Available Balance</div>
             <h1>{{bank.balance}}</h1>
         </div>
     </div>

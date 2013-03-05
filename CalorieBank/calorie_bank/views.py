@@ -11,8 +11,9 @@ from .models import *
 def home(request):
     today = datetime.date.today()
     window = today-datetime.timedelta(days=7)
+    yesterday = today-datetime.timedelta(days=1)
     try:
-        today = DietDay.objects.filter(date=datetime.datetime.now())[0]
+        current = DietDay.objects.filter(date=datetime.datetime.now())[0]
     except IndexError:
         add_day = DietDay(date=datetime.datetime.now(),calories=0)
         add_day.save()
@@ -23,7 +24,8 @@ def home(request):
     ctx = {
         "bank":bank,
         "days":days,
-        "today":today
+        "today":today,
+        "yesterday":yesterday
         }
 
     return render_to_response("index.html", ctx, RequestContext(request))
