@@ -1,0 +1,3 @@
+[submodule "pyfatsecret"]
+	path = pyfatsecret
+	url = git://github.com/trtg/pyfatsecret.git
