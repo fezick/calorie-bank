@@ -10,7 +10,7 @@ from .models import *
 
 def home(request):
     today = datetime.date.today()
-    window = today-datetime.timedelta(days=7)
+    window = today-datetime.timedelta(days=31)
     yesterday = today-datetime.timedelta(days=1)
     try:
         current = DietDay.objects.filter(date=datetime.datetime.now())[0]
@@ -21,6 +21,12 @@ def home(request):
     days = DietDay.objects.exclude(date__lt=window).order_by('-date')
     bank = CalorieBank.objects.all()[0]
     
+    for d in days:
+        balance = settings.MAX_DAILY_CALS-d.calories
+        if balance > settings.MAX_BANKED_CALS:
+            balance = settings.MAX_BANKED_CALS
+        d.balance = balance
+
     ctx = {
         "bank":bank,
         "days":days,
@@ -35,6 +41,9 @@ def update_calories(request):
     cals = request.GET.get('calories')
     day = DietDay.objects.get(id=day_id)
     day.calories = cals
+    day_bal = settings.MAX_DAILY_CALS-float(cals)
+    if day_bal > settings.MAX_BANKED_CALS:
+        day_bal = settings.MAX_BANKED_CALS
     try:
         day.save()
     except:
@@ -45,7 +54,8 @@ def update_calories(request):
     sent_data = {
         "cals":updated_day.calories,
         "row_id":row_id,
-        "balance": balance
+        "balance": balance,
+        "day_bal": day_bal
     }
     
     data = simplejson.dumps(sent_data)
