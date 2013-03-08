@@ -51,8 +51,9 @@ function close_row_form(row_id){
     $("#"+row_id+"_static").show()
     $("#"+row_id+"_update").hide()
 }
-function update_row_form(row_id,cals,balance){
-    $("#"+row_id+"_static").html(cals)
+function update_row_form(row_id,cals,balance,day_bal){
+    $("#"+row_id+"_static").html(cals);
+    $("#"+row_id+"_balance").html(day_bal);
     $("#"+row_id+"_update").children("input").val(cals)
     $("#balance h1").html(balance)
 }
@@ -62,7 +63,7 @@ function save(row_id,cals){
         url: "/update/",
         data: {"day_id":row_id.replace("day_",""),"calories":cals},
         success: function(data){
-            update_row_form(data.row_id,data.cals,data.balance);
+            update_row_form(data.row_id,data.cals,data.balance,data.day_bal);
             close_row_form(data.row_id);
         }
     });
@@ -81,9 +82,13 @@ function save(row_id,cals){
 </div>
 <div class="container">
 <div class="row">
-    <div class="span8">
+    <div class="span9">
         <table class="table table-bordered table-striped">
-        <tr><th class="span3">Date</th><th>Calories</th></tr>
+        <tr>
+            <th class="span2">Date</th>
+            <th class="span5">Calories</th>
+            <th class="span2">Banked</th>
+        </tr>
         {% for day in days %}
         {% if day.date == today %}
             <tr class="info">
@@ -104,11 +109,22 @@ function save(row_id,cals){
                     </button>
                 </span>
             </td>
+            <td>
+                <span 
+                    class="label 
+                    {% if day.balance > 0%}label-success{%endif%}
+                    {% if day.balance == 0%}label-default{%endif%}
+                    {% if day.balance < 0%}label-important{%endif%}
+                    " id="day_{{day.id}}_balance">
+                    {{day.balance}}
+                </span>
+                {% if day.date == today %}<em>pending</em>{%endif%}
+            </td>
         </tr>
         {% endfor %}
         </table>
     </div>
-    <div class="span4">
+    <div class="span3">
         <div class="label label-info" id="balance">
             <div class="label label">Available Balance</div>
             <h1>{{bank.balance}}</h1>
