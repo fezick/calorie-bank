@@ -39,6 +39,7 @@ $("td.calorie_report .static").click(function(){
     row_id = $(this).parent()[0].id;
     $("#"+row_id+"_static").hide()
     $("#"+row_id+"_update").show()
+    $("#"+row_id+"_update").children("input").focus()
     $("#"+row_id+"_update button").removeClass("disabled");
 });
 $("td.calorie_report .update .save").click(function(){
