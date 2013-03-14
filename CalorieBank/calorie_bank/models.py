@@ -54,6 +54,8 @@ class CalorieBank(models.Model):
             if remainder > settings.MAX_BANKED_CALS:
                 remainder = settings.MAX_BANKED_CALS
             bal += remainder
+            if bal < 0:
+                bal = 0
         
         # see if today exists and check to see if we over calories.
         # If so, subtract from the bank

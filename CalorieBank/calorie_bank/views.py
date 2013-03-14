@@ -11,14 +11,23 @@ from .models import *
 def home(request):
     today = datetime.date.today()
     window = today-datetime.timedelta(days=31)
-    yesterday = today-datetime.timedelta(days=1)
-    try:
-        current = DietDay.objects.filter(date=datetime.datetime.now())[0]
-    except IndexError:
-        add_day = DietDay(date=datetime.datetime.now(),calories=0)
-        add_day.save()
-        
+    # get all the diet day objects 
     days = DietDay.objects.exclude(date__lt=window).order_by('-date')
+    
+    # check for missing days by comparing today's date with the last date 
+    # in the set. If there are missing dates, create them.
+    last_day = days[0]
+    delta = (today-last_day.date).days # get time diff
+    day_shift = delta-1 # offset by one to make sure today gets created
+    while day_shift >= 0:
+        new_date = datetime.date.today() - datetime.timedelta(days=day_shift)
+        try:
+            check_day = DietDay.objects.get(date=new_date)
+        except DietDay.DoesNotExist:
+            add_day = DietDay(date=new_date,calories=0)
+            add_day.save()
+        day_shift=day_shift-1
+        
     bank = CalorieBank.objects.all()[0]
     
     for d in days:
@@ -31,7 +40,6 @@ def home(request):
         "bank":bank,
         "days":days,
         "today":today,
-        "yesterday":yesterday
         }
 
     return render_to_response("index.html", ctx, RequestContext(request))
