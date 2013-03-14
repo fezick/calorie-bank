@@ -55,6 +55,13 @@ function close_row_form(row_id){
 function update_row_form(row_id,cals,balance,day_bal){
     $("#"+row_id+"_static").html(cals);
     $("#"+row_id+"_balance").html(day_bal);
+    if(day_bal < 0){
+        $("#"+row_id+"_balance").removeClass("label-success")
+        $("#"+row_id+"_balance").addClass("label-important")
+    }else{ 
+        $("#"+row_id+"_balance").removeClass("label-important")
+        $("#"+row_id+"_balance").addClass("label-success")
+    }
     $("#"+row_id+"_update").children("input").val(cals)
     $("#balance h1").html(balance)
 }
