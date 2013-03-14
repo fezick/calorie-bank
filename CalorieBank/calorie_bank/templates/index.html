@@ -1,82 +1,10 @@
 <! doctype html>
 <html>
 <head>
-<link href="http://css.nlx.org/framework/v2/css/code/bootstrap.221.min.css" type="text/css" rel="stylesheet">
-<script src="http://js.nlx.org/framework/v2/js/def.ui.jquery.core.js"></script>
-<style>
-.container{
-    margin: 10px auto;
-}
-#balance{
-    padding: 20px 0;
-    text-align: center;
-    font-size: 6em;
-    width: 100%;
-}
-.calorie_report .static{
-    display:block;
-}
-.calorie_report .update{
-    margin: 0;
-    display: none;
-}
-.calorie_report input{
-    font-size: 1em;
-    height: 30px;
-}
-.table .btn{
-    margin-top: -9px;
-    margin-left: 10px;
-}
-</style>
-<script>
-$(document).ready(function(){
-$("td.calorie_report button.cancel").click(function(){
-    row_id = $(this).attr("data-parent-id");
-    close_row_form(row_id);
-})
-$("td.calorie_report .static").click(function(){
-    row_id = $(this).parent()[0].id;
-    $("#"+row_id+"_static").hide()
-    $("#"+row_id+"_update").show()
-    $("#"+row_id+"_update").children("input").focus()
-    $("#"+row_id+"_update button").removeClass("disabled");
-});
-$("td.calorie_report .update .save").click(function(){
-    row_id = $(this).attr("data-parent-id");
-    newcal = $("#"+row_id+" .calorie_report_input").val()
-    save(row_id,newcal);
-});
-});
-function close_row_form(row_id){
-    $("#"+row_id+"_static").show()
-    $("#"+row_id+"_update").hide()
-}
-function update_row_form(row_id,cals,balance,day_bal){
-    $("#"+row_id+"_static").html(cals);
-    $("#"+row_id+"_balance").html(day_bal);
-    if(day_bal < 0){
-        $("#"+row_id+"_balance").removeClass("label-success")
-        $("#"+row_id+"_balance").addClass("label-important")
-    }else{ 
-        $("#"+row_id+"_balance").removeClass("label-important")
-        $("#"+row_id+"_balance").addClass("label-success")
-    }
-    $("#"+row_id+"_update").children("input").val(cals)
-    $("#balance h1").html(balance)
-}
-function save(row_id,cals){
-    $("#"+row_id+"_update button").addClass("disabled");
-    $.ajax({
-        url: "/update/",
-        data: {"day_id":row_id.replace("day_",""),"calories":cals},
-        success: function(data){
-            update_row_form(data.row_id,data.cals,data.balance,data.day_bal);
-            close_row_form(data.row_id);
-        }
-    });
-}
-</script>
+    <link href="http://css.nlx.org/framework/v2/css/code/bootstrap.221.min.css" type="text/css" rel="stylesheet">
+    <link href="/static/calorie-bank.css" type="text/css" rel="stylesheet">
+    <script src="http://js.nlx.org/framework/v2/js/def.ui.jquery.core.js"></script>
+    <script src="/static/calorie-bank.js"></script>
 </head>
 <body>
 <div class="navbar">

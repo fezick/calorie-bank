@@ -1,0 +1,27 @@
+/*
+Suplimental styles to Bootstrap
+*/
+.container{
+    margin: 10px auto;
+}
+#balance{
+    padding: 20px 0;
+    text-align: center;
+    font-size: 6em;
+    width: 100%;
+}
+.calorie_report .static{
+    display:block;
+}
+.calorie_report .update{
+    margin: 0;
+    display: none;
+}
+.calorie_report input{
+    font-size: 1em;
+    height: 30px;
+}
+.table .btn{
+    margin-top: -9px;
+    margin-left: 10px;
+}
