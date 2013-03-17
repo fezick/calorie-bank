@@ -25,3 +25,7 @@ Suplimental styles to Bootstrap
     margin-top: -9px;
     margin-left: 10px;
 }
+#show_all_days{
+    margin: 0 25%;
+    width: 50%;
+}

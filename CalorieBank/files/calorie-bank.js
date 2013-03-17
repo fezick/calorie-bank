@@ -18,7 +18,35 @@ $(document).ready(function(){
         newcal = $("#"+row_id+" .calorie_report_input").val()
         save(row_id,newcal);
     });
+    row_count = 0; // init row counter
+    $(".table tr").each(function(){
+        /*
+        By default, hide all rows beyond 1 week. Also creates a button to 
+        display all days.
+        To Do: More granular control to handle lots of data.
+        */
+        console.log(row_count)
+        if(row_count>=8){ // show a weeks worth of days and the header row
+            $(this).addClass("hidden_row");
+            $(this).hide();
+        }
+        if(row_count==8){
+            $(".table").after("<button class='btn btn-info' id='show_all_days'>Show All</button>");
+        } 
+        row_count++;
+    });
 });
+$("#show_all_days").ready(function(){
+    /*
+    Handled the click on the dynamic button created in the document ready 
+    section.
+    */
+    $(this).click(function(){
+        $("tr.hidden_row").fadeIn(500);
+        $("#show_all_days").hide();
+    });
+});
+
 function close_row_form(row_id){
     /*
     Cancel the editing of calories for a given day
